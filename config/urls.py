@@ -17,14 +17,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("",TemplateView.as_view(template_name="index.html"), name="home"),
     path("login/",TemplateView.as_view(template_name="login.html"), name="login"),
     path("register/",TemplateView.as_view(template_name="register.html"), name="register"),
-    path("list-tools",TemplateView.as_view(template_name="Ai_list.html"), name="Ai_list"),
-         path("publisher/",TemplateView.as_view(template_name="publisher.html"), name="publisher"),
-     path("tool/",include("tool.urls"), name="tool"),
-     
+    path("list-tools/",TemplateView.as_view(template_name="Ai_list.html"), name="Ai_list"),
+    path("publisher/",TemplateView.as_view(template_name="publisher.html"), name="publisher"),
+    path("tool/",include("tool.urls"), name="tool"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

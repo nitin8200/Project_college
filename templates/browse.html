@@ -1,44 +1,121 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-  <h1 class="text-center text-4xl font-bold my-6">Browse Page</h1>
-
-  {% for product in productList %}
-    <h1>my text</h1>
-    <h1>{{ product.name }}</h1>
-    <h1>{{ product.price }}</h1>
-  {% endfor %}
-
-  <div class="bg-white py-6 sm:py-8 lg:py-12">
-    <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
-      <div class="mb-6 flex items-end justify-between gap-4">
-        <h2 class="text-2xl font-bold text-gray-800 lg:text-3xl">Selected</h2>
-
-        <a href="#" class="inline-block rounded-lg border bg-white px-4 py-2 text-center text-sm font-semibold text-gray-500 outline-none ring-indigo-300 transition duration-100 hover:bg-gray-100 focus-visible:ring active:bg-gray-200 md:px-8 md:py-3 md:text-base">Show more</a>
+<main class="font-body text-dark-800 min-h-screen flex flex-col relative">
+  <section class="container mx-auto py-16 px-4 space-y-16">
+    <!-- Featured Tools Section -->
+    <div class="space-y-8">
+      <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+        <div>
+          <h2 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-gradient neon-text">
+            Discover AI Tools</h2>
+          <p class="text-secondary-content mt-2">Find the perfect AI tool for your specific needs</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="/tool/compare"
+            class="btn-secondary px-5 py-3 border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300 hover:scale-105 active:scale-95 text-primary-content">
+            Compare Tools
+          </a>
+          <a href="#tools-section"
+            class="btn-primary px-5 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
+            View All Tools
+          </a>
+        </div>
       </div>
 
-      <div class="grid gap-x-4 gap-y-8 sm:grid-cols-2 md:gap-x-6 lg:grid-cols-3 xl:grid-cols-4">
-        {% for product in productList %}
-          <!-- product - start -->
-          <div>
-            <a href="#" class="group relative mb-2 block h-80 overflow-hidden rounded-lg bg-gray-100 lg:mb-3">
-              <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&q=75&fit=crop&w=600" loading="lazy" alt="Photo by Rachit Tank" class="h-full w-full object-cover object-center transition duration-200 group-hover:scale-110" />
-
-              <span class="absolute left-0 top-0 rounded-br-lg bg-red-500 px-3 py-1.5 text-sm uppercase tracking-wider text-white">sale</span>
-            </a>
-
-            <div>
-              <a href="#" class="hover:gray-800 mb-1 text-gray-500 transition duration-100 lg:text-lg">{{product.name}}</a>
-
-              <div class="flex items-end gap-2">
-                <span class="font-bold text-gray-800 lg:text-lg">₹{{product}}</span>
-                <span class="mb-0.5 text-red-500 line-through">$30.00</span>
+      <div class="space-y-8">
+        <h3 class="text-xl font-semibold font-display text-primary-content">Featured Tools</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {% for tool in featured_tools %}
+          <a href="{{ tool.website_url }}" class="block card-hover-effect rounded-2xl">
+            <div class="overflow-hidden h-full transition-all glass-card rounded-2xl border border-white/20">
+              <div class="p-6 flex items-center space-x-4">
+                <div class="w-14 h-14 rounded-xl overflow-hidden glow">
+                  <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="w-full h-full object-cover">
+                </div>
+                <div class="flex-1">
+                  <div class="flex justify-between items-center mb-2">
+                    <h4 class="font-semibold text-lg font-display text-primary-content">{{ tool.name }}</h4>
+                    <div class="flex items-center">
+                      <i class="fas fa-star text-yellow-400 text-xs mr-1"></i>
+                      <span class="text-xs font-medium text-primary-content">{{ tool.rating }}</span>
+                    </div>
+                  </div>
+                  <span
+                    class="inline-block px-3 py-1 text-xs bg-primary-500/20 text-primary-700 dark:text-primary-300 rounded-full">
+                    {{ tool.category.name }}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <!-- product - end -->
-        {% endfor %}
+          </a>
+          {% endfor %}
+        </div>
       </div>
     </div>
-  </div>
+
+    <!-- Tools Grid Section -->
+    <div id="tools-section" class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Filters Sidebar -->
+      <div class="md:col-span-1">
+        <div class="space-y-6 glass-card p-6 rounded-2xl border border-white/20 sticky top-24">
+          <h3 class="font-medium text-lg mb-4 font-display text-primary-content">Categories</h3>
+          <div class="space-y-3">
+            {% for category in categories %}
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="category-{{ category.category }}"
+                class="rounded border-gray-700 text-primary-500 focus:ring-primary-500 bg-white/10">
+              <label for="category-{{ category.category }}" class="text-sm cursor-pointer text-primary-content">
+                {{ category.category }}
+              </label>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Tools Grid -->
+      <div class="md:col-span-3 space-y-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+          {% for tool in tools %}
+          <div class="tool-card overflow-hidden transition-all glass-card rounded-2xl border border-white/20">
+            <div class="relative h-48 w-full">
+              <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="absolute inset-0 w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <div class="flex justify-between items-start mb-3">
+                <span
+                  class="inline-block px-3 py-1 text-xs bg-primary-500/20 text-primary-700 dark:text-primary-300 rounded-full">
+                  {{ tool.category.name }}
+                </span>
+                <div class="flex items-center">
+                  <i class="fas fa-star text-yellow-400 text-xs mr-1"></i>
+                  <span class="text-sm font-medium text-primary-content">{{ tool.rating }}</span>
+                </div>
+              </div>
+              <h3 class="font-bold text-xl mb-3 font-display text-primary-content">{{ tool.name }}</h3>
+              <p class="text-secondary-content text-sm line-clamp-3">{{ tool.description }}</p>
+            </div>
+            <div class="p-6 pt-0 flex justify-between">
+              <a href="{% url 'toolDetails' tool.id %}"
+                class="btn-secondary px-4 py-2 border border-white/20 rounded-full text-sm hover:bg-white/10 transition-all duration-300 hover:scale-105 active:scale-95 text-primary-content">
+                View Details
+              </a>
+              <a href="{{ tool.website_url }}"
+              class="btn-secondary px-4 py-2 border border-white/20 rounded-full text-sm hover:bg-white/10 transition-all duration-300 hover:scale-105 active:scale-95 text-primary-content">
+              Visit website
+            </a>
+              <a href="/tool/compare"
+                class="btn-primary px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full text-sm hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
+                Compare
+              </a>
+            </div>
+            
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 {% endblock %}

@@ -17,9 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import browse, compare
+from .views import browse, compare, toolDetails
 
 urlpatterns = [
     path("browse/",browse, name="browse"),
     path("compare/",compare, name="compare"),
+    path("view/<int:tool_id>",toolDetails, name="toolDetails"),
+   
 ]
