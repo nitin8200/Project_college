@@ -256,9 +256,12 @@
         <div class="grid-pattern"></div>
     </div>
 
-    <!-- Theme Toggle Button -->
-    <div class="absolute top-4 right-4 z-50">
-        <button id="theme-toggle" class="p-3 rounded-full hover:bg-white/10 transition-all duration-300 hover:rotate-12">
+    <!-- Header with Theme Toggle and Back Button -->
+    <header class="w-full flex items-center justify-between px-4 py-4 z-50 relative">
+        <a href="{% url 'browse' %}" class="btn-secondary px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300 flex items-center">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Browse
+        </a>
+        <button id="theme-toggle" class="p-3 rounded-full border border-primary-100 bg-white/80 dark:bg-white/10 hover:bg-primary-100/60 dark:hover:bg-white/20 transition-all duration-300 hover:rotate-12 shadow text-primary-700 dark:text-white">
             <!-- Sun icon -->
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="5"></circle>
@@ -276,20 +279,17 @@
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         </button>
-    </div>
+    </header>
 
     <section class="container mx-auto py-8 px-4 space-y-8">
         <div class="flex items-center justify-between mb-8">
             <h1 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow">
                 Compare AI Tools
             </h1>
-            <a href="{% url 'browse' %}" class="btn-secondary px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Browse
-            </a>
         </div>
 
         <!-- Search and Add Tool to Comparison Form -->
-        <form method="get" class="mb-8 flex flex-col sm:flex-row items-center gap-4 glass-card p-4 rounded-xl border border-white/20">
+        <form method="get" class="mb-8 flex flex-col sm:flex-row items-center gap-4 glass-card p-4 rounded-xl border border-white/20" onsubmit="return handleSearchAdd();">
             {% for id in current_ids %}
                 <input type="hidden" name="tools" value="{{ id }}">
             {% endfor %}
@@ -441,6 +441,17 @@
                 option.style.display = option.text.toLowerCase().includes(input) ? "" : "none";
             }
         }
+
+        // Fix: Add tool on search button click (select must have a value)
+        function handleSearchAdd() {
+            var select = document.getElementById('toolSelect');
+            if (!select.value) {
+                alert('Please select a tool to add.');
+                return false;
+            }
+            return true;
+        }
+
         // Set placeholder color for select on load
         document.addEventListener('DOMContentLoaded', function() {
             var select = document.getElementById('toolSelect');

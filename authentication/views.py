@@ -6,6 +6,8 @@ from django.contrib import messages
 # Register View
 def register_view(request):
     if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
@@ -17,7 +19,13 @@ def register_view(request):
             elif User.objects.filter(email=email).exists():
                 messages.error(request, "Email already registered")
             else:
-                user = User.objects.create_user(username=username, email=email, password=password)
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password,
+                    first_name=first_name,
+                    last_name=last_name
+                )
                 user.save()
                 messages.success(request, "Account created successfully")
                 return redirect('login')
@@ -35,7 +43,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             messages.success(request, "Logged in successfully")
-            return redirect('home')  # Replace 'home' with your desired redirect URL
+            return redirect('home')  # Change 'home' to your main page name
         else:
             messages.error(request, "Invalid username or password")
     return render(request, 'login.html')

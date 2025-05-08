@@ -22,9 +22,16 @@ def browse(request):
 
 def compare(request):
     tool_ids = request.GET.getlist('tools')
-    tools = Tool.objects.filter(id__in=tool_ids)
-    all_tools = Tool.objects.exclude(id__in=tool_ids)
-    current_ids = tool_ids
+    if tool_ids:
+        tools = Tool.objects.filter(id__in=tool_ids)
+        all_tools = Tool.objects.exclude(id__in=tool_ids)
+        current_ids = tool_ids
+    else:
+        # Show first 2 tools by default if none selected
+        tools = Tool.objects.all()[3:5]
+        all_tools = Tool.objects.exclude(id__in=[tool.id for tool in tools])
+        current_ids = [str(tool.id) for tool in tools]
+
     features = [
         {'name': 'Category', 'values': [tool.category.name for tool in tools]},
         {'name': 'Pricing', 'values': [tool.pricing for tool in tools]},

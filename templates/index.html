@@ -7,7 +7,149 @@
 
 
 {% block script %}
+<script>
+    // Check for dark mode preference
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
 
+    // Toggle dark mode
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('color-theme', 'light');
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('color-theme', 'dark');
+        }
+    });
+
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', function () {
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Login Modal
+    
+    // Signup Modal
+    
+    // About button scroll
+    document.getElementById('about-btn').addEventListener('click', function (e) {
+        e.preventDefault();
+        const aboutSection = document.getElementById('about-section');
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('mobile-about-btn').addEventListener('click', function (e) {
+        e.preventDefault();
+        const aboutSection = document.getElementById('about-section');
+        aboutSection.scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('mobile-menu').classList.add('hidden');
+    });
+
+    // Close modals when clicking outside
+    window.addEventListener('click', function (event) {
+        if (event.target == loginModal) {
+            loginModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            loginModal.querySelector('.modal-content').classList.remove('animate-slide-up');
+        }
+        if (event.target == signupModal) {
+            signupModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            signupModal.querySelector('.modal-content').classList.remove('animate-slide-up');
+        }
+    });
+
+    // Button click effects
+    const buttons = document.querySelectorAll('.btn-primary, .btn-secondary');
+    buttons.forEach(button => {
+        button.addEventListener('click', function () {
+            this.classList.add('animate-scale');
+            setTimeout(() => {
+                this.classList.remove('animate-scale');
+            }, 500);
+        });
+    });
+
+    // Add hover effects to cards
+    const cards = document.querySelectorAll('.tool-card, .card-hover-effect');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function () {
+            this.classList.add('shadow-lg', 'shadow-primary-500/10');
+        });
+        card.addEventListener('mouseleave', function () {
+            this.classList.remove('shadow-lg', 'shadow-primary-500/10');
+        });
+    });
+
+    // Create Meteor Animation
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add more meteors dynamically
+        const meteorContainer = document.querySelector('.meteor-container');
+        for (let i = 0; i < 10; i++) {
+            const meteor = document.createElement('div');
+            meteor.className = 'meteor';
+            meteor.style.top = `${Math.random() * 100}%`;
+            meteor.style.left = `${Math.random() * 100}%`;
+            meteor.style.animationDelay = `${Math.random() * 10}s`;
+            meteorContainer.appendChild(meteor);
+        }
+
+        // Add more stars dynamically
+        const starsContainer = document.querySelector('.stars-container');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 5}s`;
+            star.style.width = `${Math.random() * 2 + 1}px`;
+            star.style.height = star.style.width;
+            starsContainer.appendChild(star);
+        }
+    });
+
+    // Add shimmer effect to elements
+    document.addEventListener('DOMContentLoaded', function () {
+        const shimmerElements = document.querySelectorAll('.shimmer');
+        shimmerElements.forEach(element => {
+            element.addEventListener('mouseenter', function () {
+                this.style.animationPlayState = 'running';
+            });
+            element.addEventListener('mouseleave', function () {
+                this.style.animationPlayState = 'paused';
+            });
+        });
+    });
+
+    // Categories dropdown toggle on click
+    const categoriesBtn = document.getElementById('categories-btn');
+    const categoriesDropdown = document.getElementById('categories-dropdown');
+    if (categoriesBtn && categoriesDropdown) {
+        categoriesBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            categoriesDropdown.classList.toggle('hidden');
+            categoriesDropdown.classList.toggle('opacity-0');
+            categoriesDropdown.classList.toggle('opacity-100');
+            categoriesDropdown.classList.toggle('translate-y-2');
+            categoriesDropdown.classList.toggle('translate-y-0');
+        });
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (e) {
+            if (!categoriesDropdown.contains(e.target) && !categoriesBtn.contains(e.target)) {
+                categoriesDropdown.classList.add('hidden');
+                categoriesDropdown.classList.remove('opacity-100');
+                categoriesDropdown.classList.add('opacity-0');
+                categoriesDropdown.classList.add('translate-y-2');
+                categoriesDropdown.classList.remove('translate-y-0');
+            }
+        });
+    }
+</script>
 {% endblock script %}
     
 
@@ -95,9 +237,9 @@
                     <span class="font-display font-bold text-2xl text-gradient neon-text">AI Explorer</span>
                 </a>
                 <nav class="hidden md:flex ml-10 space-x-2">
-                    <div class="relative group">
-                        <button
-                            class="flex items-center px-4 py-2 rounded-full text-base font-medium hover:bg-white/10 transition-colors duration-300 text-primary-content">
+                    <div class="relative">
+                        <button id="categories-btn"
+                            class="flex items-center px-4 py-2 rounded-full text-base font-medium hover:bg-white/10 transition-colors duration-300 text-primary-content focus:outline-none">
                             Categories
                             <svg xmlns="http://www.w3.org/2000/svg"
                                 class="h-4 w-4 ml-1 group-hover:rotate-180 transition-transform duration-300"
@@ -108,19 +250,20 @@
                             </svg>
                         </button>
                         <div
-                            class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg glass hidden group-hover:block transform transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
+                            class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg glass hidden transform transition-all duration-300 opacity-0 translate-y-2"
+                            id="categories-dropdown">
                             <div class="py-2 grid grid-cols-1 gap-1">
-                                <a href="/browse?category=1"
-                                    class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300 text-primary-content">Text
-                                    Generation</a>
-                                <a href="/browse?category=image-generation"
-                                    class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300   class="
+                                <a href="/tool/browse/?category=4"
+                                    class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300 text-primary-content">Video Editing
+                                    </a>
+                                <a href="/tool/browse/?category=3"
+                                    class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300 
                                     block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors
                                     duration-300 text-primary-content">Image Generation</a>
-                                <a href="#"
+                                <a href="/tool/browse/?category=5"
                                     class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300 text-primary-content">Code
                                     Generation</a>
-                                <a href="#"
+                                <a href="/tool/browse/?category=1"
                                     class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300 text-primary-content">Content
                                     Creation</a>
                                 <a href="#"
@@ -159,10 +302,10 @@
                 </div>
 
                 <button id="theme-toggle"
-                    class="p-3 rounded-full hover:bg-white/10 transition-all duration-300 hover:rotate-12">
+                    class="p-3 rounded-full border border-primary-100 bg-white/80 dark:bg-white/10 hover:bg-primary-100/60 dark:hover:bg-white/20 transition-all duration-300 hover:rotate-12 shadow text-primary-700 dark:text-white">
                     <!-- Sun icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" viewBox="0 0 24 24" fill="none"
-                        stroke=mpare"currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -388,7 +531,7 @@
                                     <h3 class="text-sm font-medium text-primary-content font-mono">Top AI Tools by
                                         Category</h3>
 
-                                    <!-- Text Generation -->
+                                    <!-- Video Editing -->
                                     <div
                                         class="glass-card rounded-xl p-4 border border-white/20 transition-all duration-300 hover:transform hover:translate-y-[-10px] hover:rotate-x-5 hover:shadow-lg hover:shadow-primary-500/20">
                                         <div class="flex items-center">
@@ -404,9 +547,10 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-medium text-primary-content">Text Generation
+                                                <div class="text-sm font-medium text-primary-content"> <a href="tool/browse/?category=4">Video Editing</a>
+
                                                 </div>
-                                                <div class="text-xs text-accent-content">ChatGPT, Claude, Bard</div>
+                                                <div class="text-xs text-accent-content">Runway ML, Pictory, Wisecut</div>
                                             </div>
                                             <div class="ml-auto">
                                                 <span
@@ -433,10 +577,10 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-medium text-primary-content">Image Generation
+                                                <div class="text-sm font-medium text-primary-content"> <a href="/tool/browse/?category=3">Image Generation</a>
                                                 </div>
-                                                <div class="text-xs text-accent-content">DALL-E, Midjourney, Stable
-                                                    Diffusion</div>
+                                                <div class="text-xs text-accent-content">DALL-E, Midjourney, Leonardo AI
+                                                    Imagiyo</div>
                                             </div>
                                             <div class="ml-auto">
                                                 <span
@@ -462,9 +606,9 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-medium text-primary-content">Code Generation
+                                                <div class="text-sm font-medium text-primary-content"> <a href="/tool/browse/?category=5">Code Generation</a>
                                                 </div>
-                                                <div class="text-xs text-accent-content">GitHub Copilot, CodeWhisperer
+                                                <div class="text-xs text-accent-content">GitHub Copilot, CodeGeeX,Tabnine
                                                 </div>
                                             </div>
                                             <div class="ml-auto">
@@ -496,9 +640,11 @@
                                                 </svg>
                                             </div>
                                             <div>
-                                                <div class="text-sm font-medium text-primary-content">Content Creation
+                                                <div class="text-sm font-medium text-primary-content">
+                                                    <a href="/tool/browse/?category=1">Content Creation</a>
                                                 </div>
-                                                <div class="text-xs text-accent-content">Jasper, Copy.ai, Writesonic
+                                                <div class="text-xs text-accent-content">Jasper, Copy.ai, Frase,
+                                                    1min.AI
                                                 </div>
                                             </div>
                                             <div class="ml-auto">
@@ -1000,7 +1146,7 @@
                                 class="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" viewBox="0 0 20 20"
                                 fill="currentColor">
                                 <path fill-rule="evenodd"
-                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                                    d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L12.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
                                     clip-rule="evenodd" />
                             </svg>
                         </span>
@@ -1363,6 +1509,30 @@
                 });
             });
         });
+
+        // Categories dropdown toggle on click
+        const categoriesBtn = document.getElementById('categories-btn');
+        const categoriesDropdown = document.getElementById('categories-dropdown');
+        if (categoriesBtn && categoriesDropdown) {
+            categoriesBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                categoriesDropdown.classList.toggle('hidden');
+                categoriesDropdown.classList.toggle('opacity-0');
+                categoriesDropdown.classList.toggle('opacity-100');
+                categoriesDropdown.classList.toggle('translate-y-2');
+                categoriesDropdown.classList.toggle('translate-y-0');
+            });
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!categoriesDropdown.contains(e.target) && !categoriesBtn.contains(e.target)) {
+                    categoriesDropdown.classList.add('hidden');
+                    categoriesDropdown.classList.remove('opacity-100');
+                    categoriesDropdown.classList.add('opacity-0');
+                    categoriesDropdown.classList.add('translate-y-2');
+                    categoriesDropdown.classList.remove('translate-y-0');
+                }
+            });
+        }
     </script>
 </main>
 {% endblock content %}
