@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Compare AI Tools - AI Explorer</title>
+    <title>Compare AI Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -66,29 +65,12 @@
                     fontFamily: {
                         'display': ['"Space Grotesk"', 'sans-serif'],
                         'body': ['"Outfit"', 'sans-serif'],
-                        'mono': ['"JetBrains Mono"', 'monospace'],
-                    },
-                    animation: {
-                        'gradient': 'gradient 8s ease infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        gradient: {
-                            '0%, 100%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                        },
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
                     },
                 },
             },
         }
-    </script>    
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+    </script>
     <style>
-        /* Background */
         .background-container {
             position: fixed;
             top: 0;
@@ -98,8 +80,6 @@
             z-index: -1;
             overflow: hidden;
         }
-        
-        /* Light Mode Background */
         .light-background {
             position: absolute;
             width: 100%;
@@ -107,12 +87,7 @@
             background: #f8fafc;
             background: radial-gradient(circle at top right, #f0f7ff 0%, #f8fafc 50%);
         }
-        
-        /* Dark Mode Background */
-        .dark .light-background {
-            display: none;
-        }
-        
+        .dark .light-background { display: none; }
         .dark-background {
             display: none;
             position: absolute;
@@ -120,12 +95,50 @@
             height: 100%;
             background: linear-gradient(to bottom, #0f172a, #1e293b);
         }
-        
-        .dark .dark-background {
-            display: block;
+        .dark .dark-background { display: block; }
+        .aurora-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            opacity: 0.7;
         }
-        
-        /* Grid Pattern */
+        .aurora {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: conic-gradient(
+                from 230.29deg at 51.63% 52.16%,
+                #0c96e6 0deg,
+                #8a4dff 67.5deg,
+                #f33a5f 198.75deg,
+                #0c96e6 360deg
+            );
+            opacity: 0.15;
+            filter: blur(60px);
+            animation: aurora 10s linear infinite;
+        }
+        .dark .aurora { opacity: 0.2; filter: blur(80px); }
+        @keyframes aurora {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .blob-container { position: absolute; width: 100%; height: 100%; overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(40px); }
+        .blob-1 { top: 20%; left: 15%; width: 300px; height: 300px; background: rgba(12, 150, 230, 0.15); animation: blob 15s infinite alternate; }
+        .blob-2 { top: 60%; left: 70%; width: 350px; height: 350px; background: rgba(138, 77, 255, 0.15); animation: blob 18s infinite alternate-reverse; animation-delay: 2s; }
+        .blob-3 { top: 70%; left: 20%; width: 250px; height: 250px; background: rgba(243, 58, 95, 0.15); animation: blob 20s infinite alternate; animation-delay: 4s; }
+        .dark .blob-1 { background: rgba(12, 150, 230, 0.2); }
+        .dark .blob-2 { background: rgba(138, 77, 255, 0.2); }
+        .dark .blob-3 { background: rgba(243, 58, 95, 0.2); }
+        @keyframes blob {
+            0% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+            100% { transform: translate(0px, 0px) scale(1); }
+        }
         .grid-pattern {
             position: absolute;
             width: 100%;
@@ -136,564 +149,270 @@
                 linear-gradient(to bottom, rgba(203, 213, 225, 0.1) 1px, transparent 1px);
             opacity: 0.5;
         }
-        
         .dark .grid-pattern {
             background-image: 
                 linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
                 linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
         }
-        
-        /* Glassmorphism */
-        .glass {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-        }
-        
-        .dark .glass {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-        }
-        
         .glass-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            background: rgba(255,255,255,0.96);
+            color: #1e293b;
         }
-        
         .dark .glass-card {
-            background: rgba(30, 41, 59, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            background: rgba(30,41,59,0.85);
+            color: #fff;
         }
-        
-        /* Button Effects */
+        .btn-primary, .btn-secondary {
+            color: #fff;
+        }
         .btn-primary {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            z-index: 1;
+            background: linear-gradient(to right, #6366f1, #ec4899);
+            border: none;
         }
-        
-        .btn-primary:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            z-index: -1;
+        .btn-primary:hover {
+            background: linear-gradient(to right, #818cf8, #f472b6);
         }
-        
-        .btn-primary:hover:before {
-            width: 100%;
-        }
-        
-        .btn-primary:active {
-            transform: scale(0.95);
-        }
-        
         .btn-secondary {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            z-index: 1;
+            background: rgba(30,41,59,0.7);
+            border: 1px solid rgba(100,116,139,0.2);
         }
-        
-        .btn-secondary:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-            z-index: -1;
+        .btn-secondary:hover {
+            background: rgba(100,116,139,0.2);
         }
-        
-        .btn-secondary:hover:before {
-            width: 100%;
-        }
-        
-        .btn-secondary:active {
-            transform: scale(0.95);
-        }
-        
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(12, 150, 230, 0.5);
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(12, 150, 230, 0.8);
-        }
-        
-        /* Neon text effect */
-        .neon-text {
-            text-shadow: 0 0 5px rgba(12, 150, 230, 0.5), 0 0 10px rgba(12, 150, 230, 0.3);
-        }
-        
-        /* Smooth scroll behavior */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Text Color Classes */
-        .text-primary-content {
-            @apply text-dark-800 dark:text-white;
-        }
-        
-        .text-secondary-content {
-            @apply text-dark-600 dark:text-dark-200;
-        }
-        
-        .text-accent-content {
-            @apply text-dark-500 dark:text-dark-300;
-        }
-        
         .text-gradient {
-            @apply bg-clip-text text-transparent bg-gradient-to-r from-primary-500 via-secondary-500 to-accent-500;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #0c96e6, #8a4dff, #f33a5f);
         }
-
-        /* Comparison Table Styles */
-        .comparison-table {
-            border-collapse: separate;
-            border-spacing: 0;
-            width: 100%;
+        body, .font-body {
+            color: #1e293b;
         }
-
-        .comparison-table th,
-        .comparison-table td {
-            padding: 1rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        .dark body, .dark .font-body {
+            color: #fff;
         }
-
-        .comparison-table th:first-child,
-        .comparison-table td:first-child {
-            text-align: left;
-            position: sticky;
-            left: 0;
-            z-index: 10;
-            background: inherit;
-            backdrop-filter: blur(10px);
+        input, select, table, th, td, label, .font-display, .font-bold, .font-medium {
+            color: #1e293b !important;
         }
-
-        .comparison-table th {
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
+        .dark input, .dark select, .dark table, .dark th, .dark td, .dark label, .dark .font-display, .dark .font-bold, .dark .font-medium {
+            color: #fff !important;
         }
+        ::placeholder { color: #64748b; opacity: 1; }
+        .dark ::placeholder { color: #cbd5e1; }
+        .glass-card .text-gray-200 { color: #334155 !important; }
+        .dark .glass-card .text-gray-200 { color: #e5e7eb !important; }
+        .glass-card .text-primary-100 { color: #00396b !important; }
+        .dark .glass-card .text-primary-100 { color: #bae0fd !important; }
 
-        .comparison-table tbody tr:hover {
-            background: rgba(255, 255, 255, 0.05);
+        /* --- Fix for select dropdown in dark mode --- */
+        select.search-select, .dark select.search-select {
+            background: #fff;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
         }
-
-        .dark .comparison-table tbody tr:hover {
-            background: rgba(0, 0, 0, 0.2);
+        .dark select.search-select {
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid #334155;
         }
-
-        /* Feature Rating */
-        .feature-rating {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        select.search-select option, .dark select.search-select option {
+            background: #fff;
+            color: #1e293b;
         }
-
-        .feature-rating .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin: 0 2px;
-            background-color: rgba(12, 150, 230, 0.2);
+        .dark select.search-select option {
+            background: #1e293b;
+            color: #fff;
         }
-
-        .feature-rating .dot.active {
-            background-color: #0c96e6;
+        /* --- Fix for search button visibility in dark mode --- */
+        .btn-primary, .dark .btn-primary {
+            color: #fff !important;
+            border: none;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.04);
+        }
+        /* --- Fix for search input in dark mode --- */
+        input.search-select, .dark input.search-select {
+            background: #fff;
+            color: #1e293b;
+            border: 1px solid #cbd5e1;
+        }
+        .dark input.search-select {
+            background: #1e293b;
+            color: #fff;
+            border: 1px solid #334155;
         }
     </style>
 </head>
 <body class="font-body text-dark-800 dark:text-white min-h-screen flex flex-col relative">
-    <!-- Background -->
+    <!-- Background Effects -->
     <div class="background-container">
         <div class="light-background"></div>
         <div class="dark-background"></div>
+        <div class="aurora-container"><div class="aurora"></div></div>
+        <div class="blob-container">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+        </div>
         <div class="grid-pattern"></div>
     </div>
-    
-    <!-- Header -->
-    <header class="sticky top-0 z-50 w-full glass">
-        <div class="container mx-auto px-4 flex h-20 items-center justify-between">
-            <div class="flex items-center">
-                <a href="index.html" class="flex items-center space-x-3 group">
-                    <div class="relative">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary-500 transition-all duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L13 10h3.17a3 3 0 0 1 2.12 5.12l-1.41 1.41A8 8 0 1 1 12 2z"/>
-                            <path d="M12 10v12"/>
-                            <path d="m16 16-4 4-4-4"/>
-                        </svg>
-                    </div>
-                    <span class="font-display font-bold text-2xl text-gradient neon-text">AI Explorer</span>
-                </a>
-            </div>
 
-            <div class="flex items-center space-x-4">
-                <button id="theme-toggle" class="p-3 rounded-full hover:bg-white/10 transition-all duration-300">
-                    <!-- Sun icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                    <!-- Moon icon -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- Theme Toggle Button -->
+    <div class="absolute top-4 right-4 z-50">
+        <button id="theme-toggle" class="p-3 rounded-full hover:bg-white/10 transition-all duration-300 hover:rotate-12">
+            <!-- Sun icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <!-- Moon icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
+    </div>
 
-    <!-- Main Content -->
-    <section class="container mx-auto py-8 px-4 space-y-8 mb-16">
-        <!-- Page Title -->
-        <div class="text-center mb-8">
-            <h1 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-gradient neon-text mb-4">
+    <section class="container mx-auto py-8 px-4 space-y-8">
+        <div class="flex items-center justify-between mb-8">
+            <h1 class="font-display text-3xl md:text-4xl font-bold tracking-tight text-white drop-shadow">
                 Compare AI Tools
             </h1>
-            <p class="text-secondary-content max-w-2xl mx-auto">
-                Compare different AI tools side by side to find the best one for your needs.
-            </p>
+            <a href="{% url 'browse' %}" class="btn-secondary px-4 py-2 rounded-full hover:bg-white/10 transition-all duration-300">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Browse
+            </a>
         </div>
-        
-        <!-- Tool Selection Section -->
-        <div class="glass-card rounded-xl p-6 border border-white/20">
-            <h2 class="text-xl font-bold mb-4 font-display text-primary-content">Select Tools to Compare</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Tool 1 Selection -->
-                <div>
-                    <label for="tool1" class="block text-sm font-medium text-primary-content mb-2">Tool 1</label>
-                    <select id="tool1" class="w-full px-4 py-2 rounded-lg glass-card text-primary-content focus:outline-none focus:ring-2 focus:ring-primary-500">
-                        <option value="chatgpt">ChatGPT</option>
-                        <option value="dalle">DALL-E</option>
-                        <option value="copilot">GitHub Copilot</option>
-                        <option value="claude">Claude</option>
-                        <option value="midjourney">Midjourney</option>
-                        <option value="jasper">Jasper</option>
-                    </select>
-                </div>
-                
-                <!-- Tool 2 Selection -->
-                <div>
-                    <label for="tool2" class="block text-sm font-medium text-primary-content mb-2">Tool 2</label>
-                    <select id="tool2" class="w-full px-4 py-2 rounded-lg glass-card text-primary-content focus:outline-none focus:ring-2 focus:ring-primary-500">
-                        <option value="chatgpt">ChatGPT</option>
-                        <option value="dalle" selected>DALL-E</option>
-                        <option value="copilot">GitHub Copilot</option>
-                        <option value="claude">Claude</option>
-                        <option value="midjourney">Midjourney</option>
-                        <option value="jasper">Jasper</option>
-                    </select>
-                </div>
-                
-                <!-- Tool 3 Selection -->
-                <div>
-                    <label for="tool3" class="block text-sm font-medium text-primary-content mb-2">Tool 3</label>
-                    <select id="tool3" class="w-full px-4 py-2 rounded-lg glass-card text-primary-content focus:outline-none focus:ring-2 focus:ring-primary-500">
-                        <option value="chatgpt">ChatGPT</option>
-                        <option value="dalle">DALL-E</option>
-                        <option value="copilot" selected>GitHub Copilot</option>
-                        <option value="claude">Claude</option>
-                        <option value="midjourney">Midjourney</option>
-                        <option value="jasper">Jasper</option>
-                    </select>
-                </div>
+
+        <!-- Search and Add Tool to Comparison Form -->
+        <form method="get" class="mb-8 flex flex-col sm:flex-row items-center gap-4 glass-card p-4 rounded-xl border border-white/20">
+            {% for id in current_ids %}
+                <input type="hidden" name="tools" value="{{ id }}">
+            {% endfor %}
+            <div class="relative w-full sm:w-auto">
+                <input type="text" id="toolSearch" placeholder="Search tools..." autocomplete="off"
+                    class="search-select w-full sm:w-64 mb-2 sm:mb-0" onkeyup="filterTools()">
+                <select id="toolSelect" name="tools" class="search-select w-full sm:w-64">
+                    <option value="" disabled selected>Select tool to add...</option>
+                    {% for tool in all_tools %}
+                        <option value="{{ tool.id }}">{{ tool.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
-            
-            <div class="mt-4 flex justify-center">
-                <button class="btn-primary px-6 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/20">
-                    Compare
-                </button>
-            </div>
-        </div>
-        
-        <!-- Comparison Table -->
-        <div class="glass-card rounded-xl p-6 border border-white/20 overflow-x-auto">
-            <h2 class="text-xl font-bold mb-4 font-display text-primary-content">Comparison Results</h2>
-            
-            <table class="comparison-table">
-                <thead>
-                    <tr>
-                        <th class="glass-card">Features</th>
-                        <th class="glass-card">
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-lg overflow-hidden mb-2">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1024px-ChatGPT_logo.svg.png" alt="ChatGPT" class="w-full h-full object-cover">
-                                </div>
-                                <span>ChatGPT</span>
-                            </div>
-                        </th>
-                        <th class="glass-card">
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-lg overflow-hidden mb-2">
-                                    <img src="https://s.cafebazaar.ir/images/icons/com.MartinApps.DALLEminiAIFunnyimages-bde1b0e7-7511-427d-8dbf-4fe4922f5d71_512x512.png?x-img=v1/resize,h_256,w_256,lossless_false/optimize" alt="DALL-E" class="w-full h-full object-cover">
-                                </div>
-                                <span>DALL-E</span>
-                            </div>
-                        </th>
-                        <th class="glass-card">
-                            <div class="flex flex-col items-center">
-                                <div class="w-10 h-10 rounded-lg overflow-hidden mb-2">
-                                    <img src="https://github.githubassets.com/images/modules/site/copilot/copilot.png" alt="GitHub Copilot" class="w-full h-full object-cover">
-                                </div>
-                                <span>GitHub Copilot</span>
-                            </div>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="glass-card font-medium">Category</td>
-                        <td>Text Generation</td>
-                        <td>Image Generation</td>
-                        <td>Code Generation</td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Pricing</td>
-                        <td>Free / $20 per month</td>
-                        <td>Credits-based</td>
-                        <td>$10 per month</td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Text Generation</td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Image Generation</td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Code Generation</td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Free Tier</td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">API Access</td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                            </svg>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Ease of Use</td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active">
-                                <div class="dot active"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="feature-rating">
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot active"></div>
-                                <div class="dot"></div>
-                                <div class="dot"></div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Best For</td>
-                        <td>General text generation, content creation, answering questions</td>
-                        <td>Creating images from text descriptions, image editing</td>
-                        <td>Writing and completing code, programming assistance</td>
-                    </tr>
-                    <tr>
-                        <td class="glass-card font-medium">Limitations</td>
-                        <td>Knowledge cutoff, no real-time web access</td>
-                        <td>Credit-based pricing, content restrictions</td>
-                        <td>Code quality varies, requires internet connection</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Add More Tools Button -->
-        <div class="flex justify-center">
-            <button class="btn-secondary px-6 py-2 border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300 text-primary-content">
-                Add More Tools
+            <button type="submit" class="btn-primary px-4 py-2 rounded-full">Add</button>
+        </form>
+
+        <!-- Tool Selection for Comparison -->
+        <form action="{% url 'compare' %}" method="get" id="compareForm" class="mb-8">
+          <div class="flex justify-end mb-4">
+            <button type="submit" id="compareButton"
+                class="btn-primary px-5 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled>
+                Compare (<span id="selectedCount">0</span>)
             </button>
-        </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {% for tool in tools %}
+            <div class="glass-card p-6 rounded-2xl border border-white/20 relative">
+              <input type="checkbox" name="tools" value="{{ tool.id }}"
+                  class="absolute top-4 right-4 w-5 h-5 accent-indigo-500"
+                  onchange="updateSelectedCount()">
+              <div class="flex items-center space-x-4 mb-4">
+                <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="w-12 h-12 rounded-lg shadow">
+                <div>
+                  <h3 class="font-bold text-lg">{{ tool.name }}</h3>
+                  <div class="flex items-center">
+                    <i class="fas fa-star text-yellow-400 text-xs mr-1"></i>
+                    <span class="text-sm">{{ tool.rating }}</span>
+                  </div>
+                </div>
+              </div>
+              <p class="text-gray-200 text-sm mb-2">{{ tool.description|truncatewords:20 }}</p>
+              <span class="inline-block px-3 py-1 text-xs bg-primary-500/20 text-primary-100 rounded-full">
+                {{ tool.category.name }}
+              </span>
+            </div>
+            {% endfor %}
+          </div>
+        </form>
+
+        {% if tools|length >= 2 %}
+            <div class="glass-card rounded-xl p-6 border border-white/20 overflow-x-auto">
+                <table class="comparison-table w-full">
+                    <thead class="border-b border-white/20">
+                        <tr>
+                            <th class="p-4 text-left font-display text-lg">Feature</th>
+                            {% for tool in tools %}
+                            <th class="p-4 text-left font-display text-lg align-top">
+                                <div class="flex flex-col items-center space-y-2">
+                                    <div class="flex items-center space-x-2">
+                                        <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="w-10 h-10 rounded-lg shadow">
+                                        <span class="font-semibold">{{ tool.name }}</span>
+                                    </div>
+                                    <!-- Remove button -->
+                                    <form method="get" style="display:inline;">
+                                        {% for id in current_ids %}
+                                            {% if id != tool.id|stringformat:"s" %}
+                                                <input type="hidden" name="tools" value="{{ id }}">
+                                            {% endif %}
+                                        {% endfor %}
+                                        <button type="submit" title="Remove" class="ml-2 text-red-500 hover:text-red-700">
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature in features %}
+                        <tr class="border-b border-white/10">
+                            <td class="p-4 font-medium">{{ feature.name }}</td>
+                            {% for value in feature.values %}
+                            <td class="p-4 align-top">
+                                {% if feature.name == 'Rating' %}
+                                    <div class="flex items-center">
+                                        <span class="mr-2">{{ value }}</span>
+                                        <i class="fas fa-star text-yellow-400"></i>
+                                    </div>
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="glass-card rounded-xl p-6 border border-white/20 text-center">
+                <p class="text-lg">Please select at least 2 tools to compare.</p>
+                <a href="{% url 'browse' %}" class="btn-primary px-4 py-2 mt-4 inline-block">
+                    Browse Tools
+                </a>
+            </div>
+        {% endif %}
     </section>
 
-    <!-- Simple Footer -->
-    <footer class="glass border-t border-white/10 py-6">
-        <div class="container mx-auto px-4 text-center">
-            <a href="index.html" class="flex items-center justify-center space-x-3 group mb-4">
-                <div class="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary-500 transition-all duration-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L13 10h3.17a3 3 0 0 1 2.12 5.12l-1.41 1.41A8 8 0 1 1 12 2z"/>
-                        <path d="M12 10v12"/>
-                        <path d="m16 16-4 4-4-4"/>
-                    </svg>
-                </div>
-                <span class="font-display font-bold text-xl text-gradient neon-text">AI Explorer</span>
-            </a>
-           
+    <footer class="glass border-t border-white/10 mt-12">
+        <div class="container mx-auto py-8 px-4 text-center text-dark-500 dark:text-dark-400">
+            &copy; 2023 AI Tools Directory. All rights reserved.
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script>
-        // Check for dark mode preference
+        // Theme toggle with localStorage
         if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
             document.documentElement.classList.remove('dark');
         }
-
-        // Toggle dark mode
         document.getElementById('theme-toggle').addEventListener('click', function() {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
@@ -702,6 +421,39 @@
                 document.documentElement.classList.add('dark');
                 localStorage.setItem('color-theme', 'dark');
             }
+        });
+
+        // Fix compare button enable/disable
+        function updateSelectedCount() {
+            const checked = document.querySelectorAll('input[name="tools"]:checked').length;
+            document.getElementById('selectedCount').textContent = checked;
+            document.getElementById('compareButton').disabled = checked < 2;
+        }
+        document.addEventListener('DOMContentLoaded', updateSelectedCount);
+
+        // Search filter for select options
+        function filterTools() {
+            var input = document.getElementById('toolSearch').value.toLowerCase();
+            var select = document.getElementById('toolSelect');
+            for (var i = 0; i < select.options.length; i++) {
+                var option = select.options[i];
+                if (option.value === "") continue;
+                option.style.display = option.text.toLowerCase().includes(input) ? "" : "none";
+            }
+        }
+        // Set placeholder color for select on load
+        document.addEventListener('DOMContentLoaded', function() {
+            var select = document.getElementById('toolSelect');
+            if(select.value === "") {
+                select.style.color = "#e5e7eb";
+            }
+            select.addEventListener('change', function() {
+                if(this.value === "") {
+                    this.style.color = "#e5e7eb";
+                } else {
+                    this.style.color = "#fff";
+                }
+            });
         });
     </script>
 </body>

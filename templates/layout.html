@@ -4,11 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
-  {% block title %}
-  {% endblock title %}
-
+  <title>{% block title %}My Website{% endblock title %}</title>
 
   {% block link %}
   {% endblock link %}
@@ -17,6 +13,7 @@
   {% block styles %}
   {% endblock styles %}
 
+  <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -796,11 +793,18 @@
 
 <body>
 
+  {% if messages %}
+  <div class="messages">
+    {% for message in messages %}
+    <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
   <!-- {% include 'navbar.html' %} -->
 
   {% block content %}
-
-  {% endblock %}
+  {% endblock content %}
 
 
   {% block script %}

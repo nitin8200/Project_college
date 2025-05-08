@@ -110,10 +110,10 @@
                         <div
                             class="absolute left-0 mt-2 w-56 rounded-xl shadow-lg glass hidden group-hover:block transform transition-all duration-300 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
                             <div class="py-2 grid grid-cols-1 gap-1">
-                                <a href="#"
+                                <a href="/browse?category=1"
                                     class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300 text-primary-content">Text
                                     Generation</a>
-                                <a href="#"
+                                <a href="/browse?category=image-generation"
                                     class="block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors duration-300   class="
                                     block px-4 py-2 text-sm hover:bg-white/10 rounded-lg mx-2 transition-colors
                                     duration-300 text-primary-content">Image Generation</a>
@@ -177,18 +177,18 @@
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
-                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 A7 7 0 0 0 21 12.79z"></path>
                     </svg>
                 </button>
 
                 <div class="hidden md:flex items-center space-x-3">
                     <button id="login-btn"
                         class="btn-secondary px-5 py-2.5 border border-white/20 rounded-full text-base font-medium hover:bg-white/10 transition-all duration-300 hover:scale-105 active:scale-95 text-primary-content">
-                        Sign In
+                        <a href="/login">Sign In</a>
                     </button>
                     <button id="signup-btn"
                         class="btn-primary px-5 py-2.5 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full text-base font-medium hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
-                        Sign Up
+                        <a href="/register">Sign Up</a>
                     </button>
                 </div>
 
@@ -1209,24 +1209,29 @@
                 </div>
                 <div>
                     <label for="signup-password"
-                        class="block text-sm font-medium mb-1 text-dark-800 dark:text-white">Password</label>
+                        class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Password</label>
                     <input type="password" id="signup-password"
-                        class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 glass-card border border-white/20 text-dark-800 dark:text-white"
+                        class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 glass-card border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-400"
+                        placeholder="Enter your password"
                         required>
                 </div>
                 <div>
                     <label for="confirm-password"
-                        class="block text-sm font-medium mb-1 text-dark-800 dark:text-white">Confirm Password</label>
+                        class="block text-sm font-medium mb-1 text-gray-900 dark:text-white">Confirm Password</label>
                     <input type="password" id="confirm-password"
-                        class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 glass-card border border-white/20 text-dark-800 dark:text-white"
+                        class="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 glass-card border border-gray-300 dark:border-white/20 text-gray-900 dark:text-white bg-white dark:bg-gray-800 placeholder-gray-400 dark:placeholder-gray-400"
+                        placeholder="Confirm your password"
                         required>
                 </div>
                 <div class="flex items-center">
                     <input type="checkbox" id="terms"
-                        class="rounded border-gray-700 text-primary-500 focus:ring-primary-500 bg-white/10" required>
-                    <label for="terms" class="ml-2 text-sm text-dark-800 dark:text-white">I agree to the <a href="#"
-                            class="text-primary-500 hover:text-primary-400">Terms of Service</a> and <a href="#"
-                            class="text-primary-500 hover:text-primary-400">Privacy Policy</a></label>
+                        class="rounded border-gray-400 dark:border-gray-700 text-primary-500 focus:ring-primary-500 bg-white dark:bg-gray-800" required>
+                    <label for="terms" class="ml-2 text-sm text-gray-900 dark:text-white">
+                        I agree to the
+                        <a href="#" class="text-primary-500 hover:text-primary-400">Terms of Service</a>
+                        and
+                        <a href="#" class="text-primary-500 hover:text-primary-400">Privacy Policy</a>
+                    </label>
                 </div>
                 <button type="submit"
                     class="btn-primary w-full px-4 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95">Sign
@@ -1249,7 +1254,7 @@
         }
 
         // Toggle dark mode
-        document.getElementById('theme-toggle').addEventListener('click', function () {
+        document.getElementById('theme-toggle').addEventListener('click', function() {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
                 localStorage.setItem('color-theme', 'light');
@@ -1266,79 +1271,9 @@
         });
 
         // Login Modal
-        const loginModal = document.getElementById('login-modal');
-        const loginBtn = document.getElementById('login-btn');
-        const mobileLoginBtn = document.getElementById('mobile-login-btn');
-        const closeLogin = document.getElementById('close-login');
-        const switchToSignup = document.getElementById('switch-to-signup');
-
-        loginBtn.addEventListener('click', function () {
-            loginModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                loginModal.querySelector('.modal-content').classList.add('animate-slide-up');
-            }, 10);
-        });
-
-        mobileLoginBtn.addEventListener('click', function () {
-            loginModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                loginModal.querySelector('.modal-content').classList.add('animate-slide-up');
-            }, 10);
-        });
-
-        closeLogin.addEventListener('click', function () {
-            loginModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            loginModal.querySelector('.modal-content').classList.remove('animate-slide-up');
-        });
-
-        switchToSignup.addEventListener('click', function () {
-            loginModal.style.display = 'none';
-            signupModal.style.display = 'block';
-            setTimeout(() => {
-                signupModal.querySelector('.modal-content').classList.add('animate-slide-up');
-            }, 10);
-        });
-
+        
         // Signup Modal
-        const signupModal = document.getElementById('signup-modal');
-        const signupBtn = document.getElementById('signup-btn');
-        const mobileSignupBtn = document.getElementById('mobile-signup-btn');
-        const closeSignup = document.getElementById('close-signup');
-        const switchToLogin = document.getElementById('switch-to-login');
-
-        signupBtn.addEventListener('click', function () {
-            signupModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                signupModal.querySelector('.modal-content').classList.add('animate-slide-up');
-            }, 10);
-        });
-
-        mobileSignupBtn.addEventListener('click', function () {
-            signupModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-            setTimeout(() => {
-                signupModal.querySelector('.modal-content').classList.add('animate-slide-up');
-            }, 10);
-        });
-
-        closeSignup.addEventListener('click', function () {
-            signupModal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-            signupModal.querySelector('.modal-content').classList.remove('animate-slide-up');
-        });
-
-        switchToLogin.addEventListener('click', function () {
-            signupModal.style.display = 'none';
-            loginModal.style.display = 'block';
-            setTimeout(() => {
-                loginModal.querySelector('.modal-content').classList.add('animate-slide-up');
-            }, 10);
-        });
-
+       
         // About button scroll
         document.getElementById('about-btn').addEventListener('click', function (e) {
             e.preventDefault();
@@ -1431,4 +1366,3 @@
     </script>
 </main>
 {% endblock content %}
-    
