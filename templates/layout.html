@@ -784,14 +784,40 @@
 </head>
 
 <body>
-
-  <!-- {% include 'navbar.html' %} -->
-
+  <div id="messages-container" class="fixed top-8 left-1/2 -translate-x-1/2 z-[9999] w-full max-w-md pointer-events-none">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="pointer-events-auto px-6 py-4 rounded-xl mb-3 font-medium shadow-2xl glass-card border
+          {% if message.tags == 'error' %}
+            border-red-300 bg-gradient-to-r from-red-100/80 to-red-200/80 text-red-700
+          {% elif message.tags == 'success' %}
+            border-green-300 bg-gradient-to-r from-green-100/80 to-green-200/80 text-green-700
+          {% else %}
+            border-primary-300 bg-gradient-to-r from-primary-100/80 to-secondary-100/80 text-primary-700
+          {% endif %}
+          text-lg text-center transition-opacity duration-500">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
   {% block content %}
   {% endblock content %}
 
   {% block script %}
   {% endblock script %}
+  <script>
+    // Auto-hide messages after 3 seconds
+    setTimeout(function() {
+      var msg = document.getElementById('messages-container');
+      if (msg) {
+        msg.style.opacity = '0';
+        setTimeout(function() {
+          msg.remove();
+        }, 500); // Wait for fade out transition
+      }
+    }, 3000);
+  </script>
 </body>
 
 </html>

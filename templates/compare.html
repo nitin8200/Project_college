@@ -289,21 +289,27 @@
         </div>
 
         <!-- Search and Add Tool to Comparison Form -->
-        <form method="get" class="mb-8 flex flex-col sm:flex-row items-center gap-4 glass-card p-4 rounded-xl border border-white/20" onsubmit="return handleSearchAdd();">
+        <form method="get" class="mb-8 flex flex-col sm:flex-row items-center gap-4 glass-card p-4 rounded-xl border border-white/20 shadow-lg backdrop-blur-md" onsubmit="return handleSearchAdd();">
             {% for id in current_ids %}
                 <input type="hidden" name="tools" value="{{ id }}">
             {% endfor %}
-            <div class="relative w-full sm:w-auto">
-                <input type="text" id="toolSearch" placeholder="Search tools..." autocomplete="off"
-                    class="search-select w-full sm:w-64 mb-2 sm:mb-0" onkeyup="filterTools()">
-                <select id="toolSelect" name="tools" class="search-select w-full sm:w-64">
+            <div class="relative w-full sm:w-auto flex flex-col sm:flex-row gap-2">
+                <input type="text" id="toolSearch" placeholder="Search tools..."
+                    autocomplete="off"
+                    class="search-select w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-600 bg-white/70 dark:bg-dark-800/80 text-dark-800 dark:text-white shadow-sm focus:ring-2 focus:ring-primary-400 focus:outline-none transition"
+                    onkeyup="filterTools()" />
+                <select id="toolSelect" name="tools"
+                    class="search-select w-full sm:w-64 px-4 py-2 rounded-lg border border-gray-300 dark:border-dark-600 bg-white/70 dark:bg-dark-800/80 text-dark-800 dark:text-white shadow-sm focus:ring-2 focus:ring-primary-400 focus:outline-none transition">
                     <option value="" disabled selected>Select tool to add...</option>
                     {% for tool in all_tools %}
                         <option value="{{ tool.id }}">{{ tool.name }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <button type="submit" class="btn-primary px-4 py-2 rounded-full">Add</button>
+            <button type="submit"
+                class="btn-primary px-4 py-2 rounded-full font-semibold shadow transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-400">
+                Add
+            </button>
         </form>
 
         <!-- Tool Selection for Comparison -->
@@ -312,15 +318,17 @@
             <button type="submit" id="compareButton"
                 class="btn-primary px-5 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled>
-                Compare (<span id="selectedCount">0</span>)
+                <a href="">Compare </a>(<span id="selectedCount">0</span>)
             </button>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {% for tool in tools %}
             <div class="glass-card p-6 rounded-2xl border border-white/20 relative">
-              <input type="checkbox" name="tools" value="{{ tool.id }}"
-                  class="absolute top-4 right-4 w-5 h-5 accent-indigo-500"
-                  onchange="updateSelectedCount()">
+              <label class="absolute top-4 right-4 flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox" name="tools" value="{{ tool.id }}"
+                    class="w-5 h-5 accent-indigo-500"
+                    onchange="updateSelectedCount()">
+              </label>
               <div class="flex items-center space-x-4 mb-4">
                 <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="w-12 h-12 rounded-lg shadow">
                 <div>
@@ -425,26 +433,52 @@
 
         // Fix compare button enable/disable
         function updateSelectedCount() {
-            const checked = document.querySelectorAll('input[name="tools"]:checked').length;
+            const checked = document.querySelectorAll('#compareForm input[name="tools"]:checked').length;
             document.getElementById('selectedCount').textContent = checked;
             document.getElementById('compareButton').disabled = checked < 2;
         }
         document.addEventListener('DOMContentLoaded', updateSelectedCount);
 
-        // Search filter for select options
+        // Filter select options based on search input
         function filterTools() {
             var input = document.getElementById('toolSearch').value.toLowerCase();
             var select = document.getElementById('toolSelect');
+            var visibleCount = 0;
+            var lastVisibleValue = "";
             for (var i = 0; i < select.options.length; i++) {
                 var option = select.options[i];
                 if (option.value === "") continue;
-                option.style.display = option.text.toLowerCase().includes(input) ? "" : "none";
+                if (option.text.toLowerCase().includes(input)) {
+                    option.style.display = "";
+                    visibleCount++;
+                    lastVisibleValue = option.value;
+                } else {
+                    option.style.display = "none";
+                }
+            }
+            // If only one option matches, select it automatically
+            if (visibleCount === 1) {
+                select.value = lastVisibleValue;
+            } else {
+                select.value = "";
             }
         }
 
-        // Fix: Add tool on search button click (select must have a value)
+        // Enhanced Add button logic
         function handleSearchAdd() {
             var select = document.getElementById('toolSelect');
+            var input = document.getElementById('toolSearch').value.toLowerCase();
+            var visibleOptions = [];
+            for (var i = 0; i < select.options.length; i++) {
+                var option = select.options[i];
+                if (option.value !== "" && option.style.display !== "none") {
+                    visibleOptions.push(option);
+                }
+            }
+            if (visibleOptions.length === 1) {
+                select.value = visibleOptions[0].value;
+                return true;
+            }
             if (!select.value) {
                 alert('Please select a tool to add.');
                 return false;

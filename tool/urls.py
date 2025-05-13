@@ -17,11 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.views.generic import TemplateView
-from .views import browse, compare, toolDetails
+from . import views
 
 urlpatterns = [
-    path("browse/",browse, name="browse"),
-    path("compare/",compare, name="compare"),
-    path("view/<int:tool_id>",toolDetails, name="toolDetails"),
-   
+    path('browse/', views.browse, name='browse'),
+    path('compare/', views.compare, name='compare'),
+    path('view/<int:tool_id>', views.toolDetails, name='toolDetails'),
+    path('bookmark/<int:tool_id>/', views.toggle_bookmark, name='toggle_bookmark'),
+    path('profile/', views.profile, name='profile'),
+    path('search/', views.search_results, name='search_results'),
+    path('bookmarks/', views.bookmarked_tools, name='bookmarked_tools'),
 ]

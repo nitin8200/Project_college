@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 # Register View
 def register_view(request):
@@ -42,6 +44,10 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
+            # Ensure profile exists
+            if not hasattr(user, 'profile'):
+                from .models import Profile
+                Profile.objects.create(user=user)
             messages.success(request, "Logged in successfully")
             return redirect('home')  # Change 'home' to your main page name
         else:
@@ -52,4 +58,29 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, "Logged out successfully")
-    return redirect('login')
+    return redirect('home')  # Redirect to index.html (home page)
+
+# User Profile View
+@login_required
+def user_profile_view(request):
+    # Ensure the user has a profile (create if not)
+    if not hasattr(request.user, 'profile'):
+        from .models import Profile
+        Profile.objects.create(user=request.user)
+
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Profile updated successfully!")
+            return redirect('user_profile')
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+    return render(request, 'user_profile.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'user': request.user,
+    })

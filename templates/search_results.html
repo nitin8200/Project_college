@@ -1,0 +1,107 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <!-- Background Effects (copied from Ai_list.html) -->
+<div class="background-container">
+    <div class="light-background"></div>
+    <div class="dark-background"></div>
+    <div class="aurora-container"><div class="aurora"></div></div>
+    <div class="blob-container">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+    <div class="grid-pattern"></div>
+</div>
+
+<!-- Theme Toggle Button -->
+<button id="theme-toggle"
+    class="fixed bottom-8 right-8 z-50 p-3 rounded-full border border-primary-100 bg-white/80 dark:bg-white/10 hover:bg-primary-100/60 dark:hover:bg-white/20 transition-all duration-300 hover:rotate-12 shadow text-primary-700 dark:text-white">
+    <!-- Sun icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 dark:hidden" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+    <!-- Moon icon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden dark:block" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 A7 7 0 0 0 21 12.79z"></path>
+    </svg>
+</button>
+
+<div class="container mx-auto py-16 px-4 relative z-10">
+    <h2 class="text-3xl font-bold mb-8 font-display text-gradient text-center text-dark-800 dark:text-gray-100">
+        Search Results for "{{ query }}"
+    </h2>
+    {% if tools %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            {% for tool in tools %}
+                <div class="glass-card p-6 rounded-2xl border border-white/20 shadow-lg flex flex-col h-full bg-white/90 dark:bg-dark-900/90">
+                    <div class="flex items-center mb-4">
+                        {% if tool.image %}
+                            <img src="{{ tool.image.url }}" alt="{{ tool.name }}" class="w-12 h-12 rounded-lg shadow mr-3 bg-white dark:bg-dark-800 object-contain">
+                        {% else %}
+                            <div class="w-12 h-12 rounded-lg bg-gray-200 dark:bg-dark-700 flex items-center justify-center mr-3">
+                                <i class="fa fa-robot text-2xl text-gray-400 dark:text-gray-500"></i>
+                            </div>
+                        {% endif %}
+                        <div>
+                            <h3 class="font-bold text-xl font-display text-primary-700 dark:text-primary-300">{{ tool.name }}</h3>
+                        </div>
+                    </div>
+                    <p class="mb-4 flex-1 text-gray-700 dark:text-gray-200">{{ tool.description|truncatewords:20 }}</p>
+                    <div class="flex gap-40 mt-auto">
+                        <a href="{% url 'toolDetails' tool.id %}"
+                           class="btn-primary px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full text-sm hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center block">
+                            View Details
+                        </a>
+                        <a href="{{tool.website_url}}"
+                           class="btn-primary px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full text-sm hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center block">
+                            Visit Website
+                        </a>
+                        {% if tool.website %}
+                        <a href="{{ tool.website }}" target="_blank"
+                           class="px-4 py-2 rounded-full text-sm font-semibold bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-200 border border-primary-200 dark:border-primary-800 hover:bg-primary-200 hover:dark:bg-primary-800 transition-all duration-200">
+                            Visit Website
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="glass-card p-8 rounded-2xl border border-white/20 shadow-lg text-center text-lg text-gray-700 dark:text-gray-200 bg-white/90 dark:bg-dark-900/90">
+            No tools found.
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    // Set theme on page load
+    if (localStorage.getItem('color-theme') === 'dark' ||
+        (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    } else {
+        document.documentElement.classList.remove('dark');
+    }
+    // Toggle theme on button click
+    document.getElementById('theme-toggle').addEventListener('click', function () {
+        if (document.documentElement.classList.contains('dark')) {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('color-theme', 'light');
+        } else {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('color-theme', 'dark');
+        }
+    });
+</script>
+{% endblock %}

@@ -29,7 +29,7 @@
                 </p>
             </div>
             <div class="flex flex-col sm:flex-row gap-4">
-                <a href="#tools-section" class="btn-primary px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full font-medium text-lg hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
+                <a href="{% url 'browse' %}" class="btn-primary px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full font-medium text-lg hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
                     <span class="flex items-center justify-center">
                         View All Tools
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
@@ -71,29 +71,57 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
             <!-- Filters Sidebar -->
             <div class="md:col-span-1">
-                <div class="space-y-6 glass-card p-6 rounded-2xl border border-white/20 sticky top-24 bg-white/80 shadow-lg dark:bg-transparent">
-                    <h3 class="font-medium text-lg mb-4 font-display">Categories</h3>
-                    <div class="space-y-3">
-                        <a href="{% url 'browse' %}" class="block px-4 py-2 rounded-lg text-sm cursor-pointer text-dark-800 dark:text-white bg-white/70 dark:bg-white/10 hover:bg-primary-500/20 transition-all duration-300 border border-primary-100 dark:border-white/10 shadow-sm {% if not selected_category %}font-bold bg-primary-500/20 border-primary-400{% endif %}">
-                            All Categories
-                        </a>
-                        {% for category in categories %}
-                        <a href="{% url 'browse' %}?category={{ category.id }}" class="block px-4 py-2 rounded-lg text-sm cursor-pointer text-dark-800 dark:text-white bg-white/70 dark:bg-white/10 hover:bg-primary-500/20 transition-all duration-300 border border-primary-100 dark:border-white/10 shadow-sm {% if selected_category == category.id %}font-bold bg-primary-500/20 border-primary-400{% endif %}">
-                            {{ category.name }}
-                        </a>
-                        {% endfor %}
+                <form method="get" id="filterForm">
+                    <div class="space-y-6 glass-card p-6 rounded-2xl border border-white/20 sticky top-24 bg-white/80 shadow-lg dark:bg-transparent">
+                        <h3 class="font-medium text-lg mb-4 font-display">Categories</h3>
+                        <div class="space-y-3">
+                            <select name="category" class="w-full px-4 py-2 rounded-lg border border-primary-100 dark:border-white/10 bg-white/70 dark:bg-dark-800 text-dark-800 dark:text-white">
+                                <option value="" {% if not selected_category %}selected{% endif %}>All Categories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}" {% if selected_category == category.id %}selected{% endif %}>{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <h3 class="font-medium text-lg mt-8 mb-4 font-display">Pricing</h3>
+                        <div class="space-y-3">
+                            <select name="pricing" class="w-full px-4 py-2 rounded-lg border border-primary-100 dark:border-white/10 bg-white/70 dark:bg-dark-800 text-dark-800 dark:text-white">
+                                <option value="" {% if not selected_pricing %}selected{% endif %}>All</option>
+                                <option value="Free" {% if selected_pricing == 'Free' %}selected{% endif %}>Free</option>
+                                <option value="Paid" {% if selected_pricing == 'Paid' %}selected{% endif %}>Paid</option>
+                                <option value="Freemium" {% if selected_pricing == 'Freemium' %}selected{% endif %}>Freemium</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="mt-6 w-full btn-primary px-6 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-full font-medium text-lg hover:shadow-lg hover:shadow-primary-500/20 transition-all duration-300 hover:scale-105 active:scale-95">
+                            Filter
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
 
             <!-- Tools Grid -->
             <div class="md:col-span-3 space-y-8">
-                <form action="{% url 'compare' %}" method="get" id="compareForm" class="mb-8">
-                    
+                <form id="compareForm" class="mb-8" onsubmit="return handleCompareSubmit(event)">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                         {% for tool in tools %}
                         <div class="tool-card overflow-hidden transition-all glass-card rounded-2xl border border-white/20 relative">
-                            <input type="checkbox" name="tools" value="{{ tool.id }}" class="absolute top-4 right-4 w-5 h-5 accent-primary-500" onchange="updateSelectedCount()">
+                            <!-- Bookmark Icon Button -->
+                            <button type="button"
+                                class="bookmark-btn absolute top-4 right-4 w-6 h-6 flex items-center justify-center transition-colors"
+                                aria-label="Bookmark"
+                                data-tool-id="{{ tool.id }}"
+                                data-bookmarked="{% if tool.id in bookmarked_ids %}true{% else %}false{% endif %}">
+                                {% if tool.id in bookmarked_ids %}
+                                <!-- Filled Bookmark -->
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="#0c96e6" class="w-6 h-6" viewBox="0 0 20 20">
+                                    <path d="M5 3a2 2 0 0 0-2 2v12a1 1 0 0 0 1.447.894L10 15.118l5.553 2.776A1 1 0 0 0 17 17V5a2 2 0 0 0-2-2H5zm0 2h10v11.382l-4.553-2.277a1 1 0 0 0-.894 0L5 16.382V5z"/>
+                                </svg>
+                                {% else %}
+                                <!-- Outline Bookmark -->
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#0c96e6" stroke-width="2" class="w-6 h-6" viewBox="0 0 20 20">
+                                    <path d="M5 3a2 2 0 0 0-2 2v12a1 1 0 0 0 1.447.894L10 15.118l5.553 2.776A1 1 0 0 0 17 17V5a2 2 0 0 0-2-2H5z"/>
+                                </svg>
+                                {% endif %}
+                            </button>
                             <div class="p-6">
                                 <div class="flex items-center space-x-4 mb-4">
                                     <div class="w-12 h-12 rounded-xl overflow-hidden flex-shrink-0">
@@ -128,11 +156,28 @@
                         </div>
                         {% endfor %}
                     </div>
+                    <div class="flex justify-end mt-4">
+                        <button type="submit" id="compareButton"
+                            class="btn-primary px-5 py-2 rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                            disabled>
+                            Compare Tools (<span id="selectedCount">0</span>)
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     </section>
 </main>
+
+<form id="csrf-form" style="display:none;">{% csrf_token %}</form>
+
+<style>
+/* Optional: Improve option visibility in dark mode */
+.dark select, .dark option {
+    color: #fff !important;
+    background: #1a202c !important; /* Tailwind's dark-800 */
+}
+</style>
 
 <script>
 function updateSelectedCount() {
@@ -164,5 +209,53 @@ if (themeToggle) {
         }
     });
 }
+
+function handleCompareSubmit(event) {
+    event.preventDefault();
+    const checked = Array.from(document.querySelectorAll('input[name="tools"]:checked')).map(cb => cb.value);
+    if (checked.length < 2) {
+        alert('Please select at least 2 tools to compare.');
+        return false;
+    }
+    // Build the compare URL with selected tool IDs as query params
+    const url = "{% url 'compare' %}" + "?tools=" + checked.join("&tools=");
+    window.location.href = url;
+    return false;
+}
+
+// Get CSRF token from the hidden form
+function getCSRFToken() {
+    return document.querySelector('#csrf-form input[name="csrfmiddlewaretoken"]').value;
+}
+
+document.querySelectorAll('.bookmark-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const toolId = this.getAttribute('data-tool-id');
+        fetch(`/tool/bookmark/${toolId}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (response.status === 403) {
+                alert('You must be logged in to bookmark tools.');
+                return;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data) return;
+            if (data.status === 'added') {
+                this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="#0c96e6" class="w-6 h-6" viewBox="0 0 20 20"><path d="M5 3a2 2 0 0 0-2 2v12a1 1 0 0 0 1.447.894L10 15.118l5.553 2.776A1 1 0 0 0 17 17V5a2 2 0 0 0-2-2H5zm0 2h10v11.382l-4.553-2.277a1 1 0 0 0-.894 0L5 16.382V5z"/></svg>`;
+                this.setAttribute('data-bookmarked', 'true');
+            } else if (data.status === 'removed') {
+                this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#0c96e6" stroke-width="2" class="w-6 h-6" viewBox="0 0 20 20"><path d="M5 3a2 2 0 0 0-2 2v12a1 1 0 0 0 1.447.894L10 15.118l5.553 2.776A1 1 0 0 0 17 17V5a2 2 0 0 0-2-2H5z"/></svg>`;
+                this.setAttribute('data-bookmarked', 'false');
+            }
+        });
+    });
+});
 </script>
 {% endblock %}
